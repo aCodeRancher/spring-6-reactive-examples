@@ -4,9 +4,7 @@ import guru.springframework.spring6reactiveexamples.domain.Person;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class PersonRepositoryImplTest {
@@ -87,29 +85,22 @@ class PersonRepositoryImplTest {
 
     @Test
     void testGetById() {
-        Mono<Person> fionaMono = personRepository.findAll().filter(person -> person.getFirstName().equals("Fiona"))
-                .next();
-
-        fionaMono.subscribe(person -> System.out.println(person.getFirstName()));
+        Integer id = 1;
+        Mono<Person> fionaMono = personRepository.getById(id);
+        fionaMono.subscribe(person -> assertEquals(person.getId(),id));
     }
 
     @Test
     void testFindPersonByIdNotFound() {
-        Flux<Person> personFlux = personRepository.findAll();
 
         final Integer id = 8;
 
-        Mono<Person> personMono = personFlux.filter(person -> person.getId() == id).single()
-                .doOnError(throwable -> {
-                    System.out.println("Error occurred in flux");
-                    System.out.println(throwable.toString());
-                });
-
+        Mono<Person> personMono = personRepository.getById(id) ;
         personMono.subscribe(person -> {
             System.out.println(person.toString());
         }, throwable -> {
             System.out.println("Error occurred in the mono");
-            System.out.println(throwable.toString());
+            assertEquals(throwable.toString(),"java.util.NoSuchElementException: Source was empty");
         });
     }
 }
