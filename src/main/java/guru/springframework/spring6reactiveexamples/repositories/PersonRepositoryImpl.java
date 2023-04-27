@@ -4,6 +4,8 @@ import guru.springframework.spring6reactiveexamples.domain.Person;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
  * Created by jt, Spring Framework Guru.
  */
@@ -14,13 +16,17 @@ public class PersonRepositoryImpl implements PersonRepository {
     Person sam = Person.builder().id(3).firstName("Sam").lastName("Axe").build();
     Person jesse = Person.builder().id(4).firstName("Jesse").lastName("Porter").build();
 
+    List<Person> personList = List.of(michael, fiona, sam, jesse);
+
     @Override
     public Mono<Person> getById(Integer id) {
-        return Mono.just(michael);
+        Mono<Person> person = getById(id);
+         return person;
     }
 
     @Override
     public Flux<Person> findAll() {
-        return Flux.just(michael, fiona, sam, jesse);
+         Flux<Person> people = Flux.fromIterable(personList);
+        return people;
     }
 }
