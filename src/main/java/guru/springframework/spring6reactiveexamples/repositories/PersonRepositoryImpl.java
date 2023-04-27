@@ -21,7 +21,7 @@ public class PersonRepositoryImpl implements PersonRepository {
 
     @Override
     public Mono<Person> getById(Integer id) {
-        Mono<Person> person = getById(id);
+        Mono<Person> person = Flux.fromIterable(personList).filter(p-> p.getId().equals(id)).single();
          return person;
     }
 
