@@ -96,9 +96,8 @@ class PersonRepositoryImplTest {
         final Integer id = 8;
 
         Mono<Person> personMono = personRepository.getById(id) ;
-        personMono.subscribe(person -> {
-            System.out.println(person.toString());
-        }, throwable -> {
+        personMono.subscribe( null
+         , throwable -> {
             System.out.println("Error occurred in the mono");
             assertEquals(throwable.toString(),"java.util.NoSuchElementException: Source was empty");
         });
